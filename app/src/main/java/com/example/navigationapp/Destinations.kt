@@ -11,3 +11,15 @@ object Login : Destinations {
 object Dashboard : Destinations {
     override val route: String = "Dashboard"
 }
+
+object Profile : Destinations {
+    override val route: String = "Profile"
+}
+
+object Settings : Destinations {
+    override val route: String = "Settings"
+}
+
+object About : Destinations {
+    override val route: String = "About"
+}
