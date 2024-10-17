@@ -30,7 +30,7 @@ fun MyNavigation() {
             LoginScreen(navController)
         }
         composable(Dashboard.route) {
-            DashboardScreen(navController, drawerState)
+            DashboardScreen(navController)
         }
     }
 }

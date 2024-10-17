@@ -14,34 +14,50 @@ import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.material3.rememberDrawerState
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
+import androidx.navigation.compose.NavHost
+import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.launch
 
 @Composable
 fun DashboardScreen(
     navController: NavHostController = rememberNavController(),
+    coroutineScope: CoroutineScope = rememberCoroutineScope(),
     drawerState: DrawerState = rememberDrawerState(initialValue = DrawerValue.Open)
 ) {
     ModalNavigationDrawer(
         drawerState = drawerState,
         drawerContent = {
             ModalDrawerSheet {
-                Box(
-                    modifier = Modifier
-                        .fillMaxSize()
-                        .background(MaterialTheme.colorScheme.background),
-                    contentAlignment = Alignment.Center
-                ) {
-                    Text(text = "Drawer Content")
-                }
+               DrawerContent(menus) { route ->
+                   coroutineScope.launch {
+                       drawerState.close()
+                   }
+                   navController.navigate(route)
+               }
             }
         }
-    ) { Surface {
-        TopAppBar()
+    ) {
+        NavHost(navController = navController, startDestination = Profile.route) {
+            composable(Profile.route) {
+                ProfileScreen(drawerState)
+            }
+            composable(Settings.route) {
+                SettingsScreen(drawerState)
+            }
+            composable(About.route) {
+                AboutScreen(drawerState)
+            }
+        }
+        Surface {
+        TopAppBar(drawerState = drawerState, title = "Dashboard")
         DashboardContent()
     } }
 }
